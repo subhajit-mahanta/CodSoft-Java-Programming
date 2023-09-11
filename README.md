@@ -1,3 +1,3 @@
-# CodSoft-Java-Programming
+# House Of Code Internship Projects
 
-The projects of Java Development Programming as CoSoft Intern.
+The projects of Java Development Programming as House Of Code Intern.
