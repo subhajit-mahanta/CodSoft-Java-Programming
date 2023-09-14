@@ -3,20 +3,34 @@ const resultDiv = document.getElementById('result');
 const userScoreSpan = document.getElementById('user-score');
 const computerScoreSpan = document.getElementById('computer-score');
 
+const userScoreEmoji = document.createElement('span');
+userScoreEmoji.innerHTML = ' 🏆';
+userScoreSpan.appendChild(userScoreEmoji);
+
+const computerScoreEmoji = document.createElement('span');
+computerScoreEmoji.innerHTML = ' 🤖';
+computerScoreSpan.appendChild(computerScoreEmoji);
+
+const historyList = document.getElementById('history-list');
+
 let userScore = 0;
 let computerScore = 0;
+const gameHistory = [];
 
 buttons.forEach((button) => {
     button.addEventListener('click', () => {
         const playerSelection = button.id;
         const computerSelection = computerPlay();
         const roundResult = playRound(playerSelection, computerSelection);
-        resultDiv.textContent = roundResult;
+
+        resultDiv.innerHTML = roundResult;
+        updateScores();
+        updateTiming(roundResult);
     });
 });
 
 function computerPlay() {
-    const choices = ['Rock', 'Paper', 'Scissors'];
+    const choices = ['rock', 'paper', 'scissors'];
     const randomIndex = Math.floor(Math.random() * choices.length);
     return choices[randomIndex];
 }
@@ -33,11 +47,29 @@ function playRound(playerSelection, computerSelection) {
         (playerSelection === 'scissors' && computerSelection === 'paper')
     ) {
         userScore++;
-        userScoreSpan.textContent = userScore;
-        return `You win! ${playerSelection} beats ${computerSelection}.`;
+        return `${playerSelection} beats ${computerSelection}. You win!`;
     } else {
         computerScore++;
-        computerScoreSpan.textContent = computerScore;
-        return `You lose! ${computerSelection} beats ${playerSelection}.`;
+        return `${computerSelection} beats ${playerSelection}. Computer wins!`;
     }
+}
+
+function updateScores() {
+    userScoreSpan.textContent = userScore;
+    computerScoreSpan.textContent = computerScore;
+}
+
+function updateTiming(result) {
+    const timestamp = new Date().toLocaleTimeString();
+    gameHistory.push(`${result} (${timestamp})`);
+    updateHistoryDisplay();
+}
+
+function updateHistoryDisplay() {
+    historyList.innerHTML = '';
+    gameHistory.forEach((entry) => {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = entry;
+        historyList.appendChild(listItem);
+    });
 }
